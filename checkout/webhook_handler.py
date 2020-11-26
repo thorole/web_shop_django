@@ -2,9 +2,11 @@ from django.http import HttpResponse
 
 from .models import Order, OrderLineItem
 from products.models import Product
+from profiles.models import UserProfile
 
 import json
 import time
+
 
 class StripeWH_Handler:
     """Handle Stripe webhooks"""
@@ -30,9 +32,7 @@ class StripeWH_Handler:
         save_info = intent.metadata.save_info
 
         billing_details = intent.charges.data[0].billing_details
-        print(billing_details)
         shipping_details = intent.shipping
-        print(shipping_details)
         grand_total = round(intent.charges.data[0].amount / 100, 2)
 
         # Clean data in the shipping details
@@ -40,12 +40,28 @@ class StripeWH_Handler:
             if value == "":
                 shipping_details.address[field] = None
 
+        # Update profile information if save_info was checked
+        profile = None
+        username = intent.metadata.username
+        if username != 'AnonymousUser':
+            profile = UserProfile.objects.get(user__username=username)
+            if save_info:
+                profile.default.phone_number__iexact = shipping_details.phone
+                profile.default.country__iexact = shipping_details.address.country
+                profile.default.postcode__iexact = shipping_details.address.postal_code
+                profile.default.town_or_city__iexact = shipping_details.address.city
+                profile.default.street_address1__iexact = shipping_details.address.line1
+                profile.default.street_address2__iexact = shipping_details.address.line2
+                profile.default.county__iexact = shipping_details.address.state
+                profile.save()
+
         order_exists = False
         attempt = 1
         while attempt <= 5:
             try:
                 order = Order.objects.get(
                     full_name__iexact=shipping_details.name,
+                    user_profile=profile,
                     email__iexact=billing_details.email,
                     phone_number__iexact=shipping_details.phone,
                     country__iexact=shipping_details.address.country,
