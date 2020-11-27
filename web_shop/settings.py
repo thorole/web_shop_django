@@ -36,7 +36,7 @@ else:
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', '008a7ada5d9e.ngrok.io', 'ac5a1d712a1c.ngrok.io', '6c32f97e02e8.ngrok.io']
 
 
 # Application definition
@@ -191,3 +191,4 @@ STRIPE_CURRENCY = 'usd'
 STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
 STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_WH_SECRET = env('STRIPE_WH_SECRET')
+DEFAULT_FROM_EMAIL = 'webshop@example.com'
