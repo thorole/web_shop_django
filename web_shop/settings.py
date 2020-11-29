@@ -30,10 +30,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-# if development:
-#    SECRET_KEY = env("SECRET_KEY")
-# else:
-SECRET_KEY = os.environ.get("SECRET_KEY")
+if development:
+    SECRET_KEY = env("SECRET_KEY")
+else:
+    SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -196,11 +196,11 @@ STANDARD_DELIVERY_PERCENTAGE = 10
 STRIPE_CURRENCY = 'usd'
 DEFAULT_FROM_EMAIL = 'webshop@example.com'
 
-# if development:
-#    STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
-#    STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
-#    STRIPE_WH_SECRET = env('STRIPE_WH_SECRET')
-# else:
-STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
-STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
-STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET')
+if development:
+    STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+    STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
+    STRIPE_WH_SECRET = env('STRIPE_WH_SECRET')
+else:
+    STRIPE_PUBLIC_KEY = os.environ.get('STRIPE_PUBLIC_KEY')
+    STRIPE_SECRET_KEY = os.environ.get('STRIPE_SECRET_KEY')
+    STRIPE_WH_SECRET = os.environ.get('STRIPE_WH_SECRET')
