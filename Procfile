@@ -1,1 +1,1 @@
-web: gunicorn web_shop_django.wsgi:application
+web: gunicorn web_shop.wsgi:application
